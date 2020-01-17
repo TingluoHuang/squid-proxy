@@ -24,5 +24,5 @@ jobs:
         docker push huangtingluo/squid-proxy:$version
         
         docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:$version
-        curl -I -x http://localhost:3128 https://github.com
-        curl -I -x http://github:actions@localhost:3128 https://google.com
+        curl -I -x http://$(hostname -i):3128 https://github.com
+        curl -I -x http://github:actions@$(hostname -i):3128 https://google.com
