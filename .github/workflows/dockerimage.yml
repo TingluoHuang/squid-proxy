@@ -13,11 +13,13 @@ jobs:
       squidProxy:
         image: huangtingluo/squid-proxy:latest
         ports: 
-        - 3128
+        - 3128:3128
           
     steps:
     - uses: actions/checkout@v2
     - run: |
+        apt update
+        apt install -y curl
         curl -I -x http://github:actions@${{ job.services.squidProxy.ports[3128] }} https://github.com
 #    - run: |
 #        docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:1579233427
