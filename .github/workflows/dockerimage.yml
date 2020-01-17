@@ -18,11 +18,12 @@ jobs:
         
     - name: Build the Docker image
       run: |
-        version=$(date +%s)
         docker login -u huangtingluo -p ${{secrets.dockerpat}}
-        docker build . --file Dockerfile --tag huangtingluo/squid-proxy:$version --tag huangtingluo/squid-proxy:latest
-        docker push huangtingluo/squid-proxy:$version
+        docker build . --file Dockerfile --tag huangtingluo/squid-proxy:$GITHUB_SHA --tag huangtingluo/squid-proxy:latest
+        docker push huangtingluo/squid-proxy:$GITHUB_SHA
+        docker push huangtingluo/squid-proxy:latest
         
-        docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:$version
+        docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:latest
+        sleep 10
         curl -I -x http://$(hostname -i):3128 https://github.com
         curl -I -x http://github:actions@$(hostname -i):3128 https://google.com
