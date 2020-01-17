@@ -20,9 +20,9 @@ jobs:
       run: |
         version=$(date +%s)
         docker login -u huangtingluo -p ${{secrets.dockerpat}}
-        docker build . --file Dockerfile --tag huangtingluo/squid-proxy:$version
+        docker build . --file Dockerfile --tag huangtingluo/squid-proxy:$version --tag huangtingluo/squid-proxy:latest
         docker push huangtingluo/squid-proxy:$version
         
-        docker run -n squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:$version
+        docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:$version
         curl -I -x http://localhost:3128 https://github.com
         curl -I -x http://github:actions@localhost:3128 https://google.com
