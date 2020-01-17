@@ -10,19 +10,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - run: |
-        docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:1579233427
-        docker exec squid cat /etc/squid/squid.conf
-        docker exec squid service squid restart
-        curl -I -x http://$(hostname -I):3128 https://github.com
+#    - run: |
+#        docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:1579233427
+#        docker exec squid cat /etc/squid/squid.conf
+#        docker exec squid service squid restart
+#        curl -I -x http://$(hostname -I):3128 https://github.com
         
     - name: Build the Docker image
       run: |
         version=$(date +%s)
-        #docker login -u huangtingluo -p ${{secrets.dockerpat}}
-        #docker build . --file Dockerfile --tag huangtingluo/squid-proxy:$version
-        #docker push huangtingluo/squid-proxy:$version
+        docker login -u huangtingluo -p ${{secrets.dockerpat}}
+        docker build . --file Dockerfile --tag huangtingluo/squid-proxy:$version
+        docker push huangtingluo/squid-proxy:$version
         
-        #docker run -n squid --rm -d -p 3128:3128 huangtingluo/squid-proxy
-        #curl -I -x http://localhost:3128 https://github.com
-        #curl -I -x http://github:actions@localhost:3128 https://google.com
+        docker run -n squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:$version
+        curl -I -x http://localhost:3128 https://github.com
+        curl -I -x http://github:actions@localhost:3128 https://google.com
