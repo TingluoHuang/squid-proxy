@@ -12,8 +12,8 @@ jobs:
     - uses: actions/checkout@v2
     - run: |
         docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:1579233427
-        docker exec -it squid cat /etc/squid/squid.conf
-        docker exec -it squid service squid restart
+        docker exec squid cat /etc/squid/squid.conf
+        docker exec squid service squid restart
         curl -I -x http://$(hostname -I):3128 https://github.com
         
     - name: Build the Docker image
