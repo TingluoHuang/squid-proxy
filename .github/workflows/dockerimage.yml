@@ -7,23 +7,32 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    container: 
+      image: ubuntu:18.04
+    services:
+      squidProxy:
+        image: huangtingluo/squid-proxy:latest
+        ports: 
+        - 3128
+          
     steps:
     - uses: actions/checkout@v2
+    - run: |
+        curl -I -x http://github:actions@${{ job.services.squidProxy.ports[3128] }} https://github.com
 #    - run: |
 #        docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:1579233427
 #        docker exec squid cat /etc/squid/squid.conf
 #        docker exec squid service squid restart
 #        curl -I -x http://$(hostname -I):3128 https://github.com
         
-    - name: Build the Docker image
-      run: |
-        docker login -u huangtingluo -p ${{secrets.dockerpat}}
-        docker build . --file Dockerfile --tag huangtingluo/squid-proxy:$GITHUB_SHA --tag huangtingluo/squid-proxy:latest
-        docker push huangtingluo/squid-proxy:$GITHUB_SHA
-        docker push huangtingluo/squid-proxy:latest
-        
-        docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:latest
-        sleep 10
-        curl -I -x http://$(hostname -i):3128 https://github.com
-        curl -I -x http://github:actions@$(hostname -i):3128 https://google.com
+    #- name: Build the Docker image
+    #  run: |
+    #    docker login -u huangtingluo -p ${{secrets.dockerpat}}
+    #    docker build . --file Dockerfile --tag huangtingluo/squid-proxy:$GITHUB_SHA --tag huangtingluo/squid-proxy:latest
+    #    docker push huangtingluo/squid-proxy:$GITHUB_SHA
+    #    docker push huangtingluo/squid-proxy:latest
+    #    
+    #    docker run --name squid --rm -d -p 3128:3128 huangtingluo/squid-proxy:latest
+    #    sleep 10
+    #    curl -I -x http://$(hostname -i):3128 https://github.com
+    #    curl -I -x http://github:actions@$(hostname -i):3128 https://google.com
