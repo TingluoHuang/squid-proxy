@@ -14,7 +14,7 @@ jobs:
         image: huangtingluo/squid-proxy:latest
         ports: 
         - 3128:3128
-        options: '--health-cmd sleep 5'
+        options: '--health-cmd "sleep 5"'
         
           
     steps:
